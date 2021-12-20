@@ -143,6 +143,8 @@ namespace NHSE.Core
             return Data.Slice(offset, len);
         }
 
+        public void SetPhotoData(Byte[] photoBuffer) => photoBuffer.CopyTo(Data, Offsets.ProfilePhoto);
+
         public GSaveDateMD ProfileBirthday
         {
             get => Data.ToStructure<GSaveDateMD>(Offsets.ProfileBirthday, GSaveDateMD.SIZE);

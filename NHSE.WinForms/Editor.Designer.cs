@@ -101,6 +101,7 @@
             this.CB_Players = new System.Windows.Forms.ComboBox();
             this.PB_Player = new System.Windows.Forms.PictureBox();
             this.TC_Editors = new System.Windows.Forms.TabControl();
+            this.Menu_UploadJPEG = new System.Windows.Forms.ToolStripMenuItem();
             this.Menu_Editor.SuspendLayout();
             this.CM_Picture.SuspendLayout();
             this.Tab_Map.SuspendLayout();
@@ -240,15 +241,16 @@
             // 
             this.CM_Picture.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.CM_Picture.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Menu_SavePNG});
+            this.Menu_SavePNG,
+            this.Menu_UploadJPEG});
             this.CM_Picture.Name = "CM_Picture";
             this.CM_Picture.ShowImageMargin = false;
-            this.CM_Picture.Size = new System.Drawing.Size(101, 26);
+            this.CM_Picture.Size = new System.Drawing.Size(117, 48);
             // 
             // Menu_SavePNG
             // 
             this.Menu_SavePNG.Name = "Menu_SavePNG";
-            this.Menu_SavePNG.Size = new System.Drawing.Size(100, 22);
+            this.Menu_SavePNG.Size = new System.Drawing.Size(116, 22);
             this.Menu_SavePNG.Text = "Save .png";
             this.Menu_SavePNG.Click += new System.EventHandler(this.Menu_SavePNG_Click);
             // 
@@ -839,12 +841,14 @@
             // 
             this.PB_Player.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.PB_Player.ContextMenuStrip = this.CM_Picture;
+            this.PB_Player.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PB_Player.Location = new System.Drawing.Point(6, 33);
             this.PB_Player.Name = "PB_Player";
             this.PB_Player.Size = new System.Drawing.Size(130, 130);
             this.PB_Player.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PB_Player.TabIndex = 0;
             this.PB_Player.TabStop = false;
+            this.PB_Player.Click += new System.EventHandler(this.PB_Player_Click);
             // 
             // TC_Editors
             // 
@@ -856,6 +860,13 @@
             this.TC_Editors.SelectedIndex = 0;
             this.TC_Editors.Size = new System.Drawing.Size(404, 287);
             this.TC_Editors.TabIndex = 1;
+            // 
+            // Menu_UploadJPEG
+            // 
+            this.Menu_UploadJPEG.Name = "Menu_UploadJPEG";
+            this.Menu_UploadJPEG.Size = new System.Drawing.Size(116, 22);
+            this.Menu_UploadJPEG.Text = "Upload .jpeg";
+            this.Menu_UploadJPEG.Click += new System.EventHandler(this.Menu_UploadJPEG_Click);
             // 
             // Editor
             // 
@@ -968,6 +979,7 @@
         private System.Windows.Forms.ToolStripMenuItem Menu_ItemImages;
         private System.Windows.Forms.Label L_Poki;
         private System.Windows.Forms.NumericUpDown NUD_Poki;
+        private System.Windows.Forms.ToolStripMenuItem Menu_UploadJPEG;
     }
 }
 

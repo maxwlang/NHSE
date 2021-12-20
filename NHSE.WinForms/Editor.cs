@@ -423,6 +423,8 @@ namespace NHSE.WinForms
             bmp.Save(sfd.FileName, ImageFormat.Png);
         }
 
+        private void Menu_UploadJPEG_Click(object sender, EventArgs e) => PB_Player_Click(sender, e);
+
         private void B_EditTurnipExchange_Click(object sender, EventArgs e)
         {
             var turnips = SAV.Main.Turnips;
@@ -523,5 +525,32 @@ namespace NHSE.WinForms
 
         private void NUD_PocketCount_ValueChanged(object sender, EventArgs e) => ((NumericUpDown) sender).BackColor = (uint) ((NumericUpDown) sender).Value > 20 ? Color.Red : NUD_BankBells.BackColor;
         private void NUD_Wallet_ValueChanged(object sender, EventArgs e) => NUD_Wallet.BackColor = (ulong) NUD_Wallet.Value > 99_999 ? Color.Red : NUD_BankBells.BackColor;
+
+        private void PB_Player_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog pfpSelector = new OpenFileDialog();
+            pfpSelector.Title = "Browse for a profile picture";
+            pfpSelector.Filter = "JPG Files (*.jpg, *.jpeg)|*.JPG;*.JPEG";
+            pfpSelector.CheckFileExists = true;
+            DialogResult dr = pfpSelector.ShowDialog();
+
+            if (dr == DialogResult.OK)
+            {
+                Debug.WriteLine("Selected: " + pfpSelector.FileName);
+                Image uploadedPfp = Image.FromFile(pfpSelector.FileName);
+                if (uploadedPfp.Width != 500 || uploadedPfp.Height != 500) MessageBox.Show("Image needs to be exactly 500px x 500px.", "Error with image", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                try
+                {
+                    var pers = SAV.Players[PlayerIndex].Personal;
+                    Byte[] data = File.ReadAllBytes(pfpSelector.FileName);
+                    pers.SetPhotoData(data);
+                    LoadPlayer(PlayerIndex);
+                } catch (Exception ex)
+                {
+                    Debug.WriteLine("We crashed with: " + ex.Message);
+                }
+            }
+        }
     }
 }
