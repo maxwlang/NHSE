@@ -65,7 +65,7 @@ namespace NHSE.WinForms
                 var flag = FlagUtil.GetFlag(data, ofs, i);
                 string name = $"{remakeIndex:0000} V{variant:0} - {itemName}";
 
-                if (ItemRemakeInfoData.List.TryGetValue((short) remakeIndex, out var info))
+                if (ItemRemakeInfoData.List.TryGetValue((short)remakeIndex, out var info))
                     name = $"{name} ({info.GetBodyDescription(variant, str)})";
 
                 CLB_Remake.Items.Add(name, flag);
@@ -75,7 +75,7 @@ namespace NHSE.WinForms
         public void GiveAll(IReadOnlyList<ushort> indexes, bool value = true)
         {
             foreach (var item in indexes)
-                GiveItem(item, value);
+                GiveItem(item, value, CB_VariantBodiesOnly.Checked);
             System.Media.SystemSounds.Asterisk.Play();
         }
 
@@ -84,7 +84,7 @@ namespace NHSE.WinForms
             if (!value)
             {
                 for (ushort i = 0; i < CLB_Items.Items.Count; i++)
-                    GiveItem(i, false);
+                    GiveItem(i, false, CB_VariantBodiesOnly.Checked);
                 return;
             }
 
@@ -95,14 +95,33 @@ namespace NHSE.WinForms
                     continue;
                 if (skip.Contains(i))
                     continue;
-                GiveItem(i);
+                GiveItem(i, remakeOnly: CB_VariantBodiesOnly.Checked);
             }
             System.Media.SystemSounds.Asterisk.Play();
         }
 
-        private void GiveItem(ushort item, bool value = true)
+        private void GiveAllFurniture(IReadOnlyList<string> items, bool value = true)
         {
-            CLB_Items.SetItemChecked(item, value);
+            var skip = new HashSet<ushort>(GameLists.NoCheckReceived);
+            skip.UnionWith(GameLists.Bugs);
+            skip.UnionWith(GameLists.Fish);
+            skip.UnionWith(GameLists.Art);
+            skip.UnionWith(GameLists.Dive);
+
+            for (ushort i = 1; i < CLB_Items.Items.Count; i++)
+            {
+                if (string.IsNullOrEmpty(items[i]))
+                    continue;
+                if (skip.Contains(i))
+                    continue;
+                GiveItem(i, value, CB_VariantBodiesOnly.Checked);
+            }
+            System.Media.SystemSounds.Asterisk.Play();
+        }
+        private void GiveItem(ushort item, bool value = true, bool remakeOnly = false)
+        {
+            if (!remakeOnly)
+                CLB_Items.SetItemChecked(item, value);
 
             var remakeIndex = ItemRemakeUtil.GetRemakeIndex(item);
             if (!ItemRemakeInfoData.List.TryGetValue(remakeIndex, out var info))
@@ -123,6 +142,7 @@ namespace NHSE.WinForms
         private void B_AllFish_Click(object sender, EventArgs e) => GiveAll(GameLists.Fish, ModifierKeys != Keys.Alt);
         private void B_AllArt_Click(object sender, EventArgs e) => GiveAll(GameLists.Art, ModifierKeys != Keys.Alt);
         private void B_AllDive_Click(object sender, EventArgs e) => GiveAll(GameLists.Dive, ModifierKeys != Keys.Alt);
+        private void B_AllFurniture_Click(object sender, EventArgs e) => GiveAllFurniture(GameInfo.Strings.itemlist, ModifierKeys != Keys.Alt);
         private void B_GiveEverything_Click(object sender, EventArgs e) => GiveEverything(GameInfo.Strings.itemlist, ModifierKeys != Keys.Alt);
         private void B_Cancel_Click(object sender, EventArgs e) => Close();
 
